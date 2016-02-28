@@ -1,28 +1,143 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//Utility class for velocityRange
+[System.Serializable]
+public class VelocityRange
+{
+    public float velMin, velMax;
+
+    //Constructor
+    public VelocityRange(float velMin, float velMax)
+    {
+        this.velMin = velMin;
+        this.velMax = velMax;
+    }
+}
+
+//CoolGuyController class
 public class CoolGuyController : MonoBehaviour {
+    //Public Instance Variables
+    public float speed = 50f;
+    public float jump = 350f;
+
+    public VelocityRange velocityRange = new VelocityRange(300f, 1000f);
 
     //pRIVATE iNSTANCE vARIABLES
+    private Rigidbody2D _rigidBody2D;
+    private Transform _transform;
+    private Animator _animator;   //may not use
+
     private AudioSource[] _audioSources;
     private AudioSource _coinSound;
+    private AudioSource _jumpSound;
+
+    private float _movingValue = 0;
+    private bool _isFacingRight = true;
+    private bool _isGrounded = true;
 
     // Use this for initialization
     void Start ()
     {
+        this._rigidBody2D = gameObject.GetComponent<Rigidbody2D>();
+        this._transform = gameObject.GetComponent<Transform>();
+//        this._animator = gameObject.GetComponent<Animator>();
+
         this._audioSources = gameObject.GetComponents<AudioSource> ();
         this._coinSound = this._audioSources[0];
+        this._jumpSound = this._audioSources[1];    
     }
 	
-	// Update is called once per frame
-	void Update () {
-	
+	void FixedUpdate ()
+    {
+        float forceX = 0f;
+        float forceY = 0f;
+
+        float absVelX = Mathf.Abs(this._rigidBody2D.velocity.x);
+        float absVelY = Mathf.Abs(this._rigidBody2D.velocity.y);
+
+        //check if player is moving
+        this._movingValue = Input.GetAxis("Horizontal");
+        
+        if (this._movingValue != 0)
+        {
+            //coolGuy moving
+            if (this._movingValue > 0)
+            {
+                //right
+                if(absVelX < this.velocityRange.velMax)
+                {
+                    forceX = this.speed;
+                    this._isFacingRight = true;
+                    this._flip();
+                }
+            }
+            else if(this._movingValue < 0)
+            {
+                //left
+                if (absVelX < this.velocityRange.velMax)
+                {
+                    forceX = -this.speed;
+                    this._isFacingRight = false;
+                    this._flip();
+                }
+            }
+        }
+        else if(this._movingValue == 0)
+        {
+            //coolGuy not moving
+
+        }
+
+        //this._movingValue = Input.GetAxis("Vertical");
+        //Debug.Log(this.jump);
+
+        //check if player is jumping
+        if (Input.GetKey("up") || Input.GetKey(KeyCode.W))
+        {
+            // check if player is grounded
+            if (this._isGrounded)
+            {
+                //player is jumping
+                if (absVelY < this.velocityRange.velMax)
+                {
+                    forceY = this.jump;
+                    this._jumpSound.Play();
+                    this._isGrounded = false;
+                }
+            }
+        }
+
+
+        this._rigidBody2D.AddForce(new Vector2(forceX, forceY));
 	}
+
     void OnCollisionEnter2D(Collision2D otherCollider)
     {
         if (otherCollider.gameObject.CompareTag("Coin"))
         {
             this._coinSound.Play();
+        }
+    }
+    void OnCollisionStay2D(Collision2D otherCollider)
+    {
+        if (otherCollider.gameObject.CompareTag("Platform"))
+        {
+            this._isGrounded = true;
+        }
+    }
+
+    //private method
+    private void _flip()
+    {
+        if (this._isFacingRight)
+        {
+            this._transform.localScale = new Vector2(.0154f, .0112f);
+        }
+
+        else
+        {
+            this._transform.localScale = new Vector2(-.0154f, .0112f);
         }
     }
 }
