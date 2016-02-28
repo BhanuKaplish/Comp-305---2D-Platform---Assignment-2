@@ -20,7 +20,7 @@ public class CoolGuyController : MonoBehaviour {
     //Public Instance Variables
     public float moveForce;
     public float jumpForce;
-    public Camera camera;
+    public Transform camera;
 
     public VelocityRange velocityRange;
     //public Transform groundCheck;
@@ -59,6 +59,9 @@ public class CoolGuyController : MonoBehaviour {
 	
 	void FixedUpdate ()
     {
+        Vector3 currentPosition = new Vector3(this._transform.position.x, this._transform.position.y, -1f);
+        this.camera.position = currentPosition;
+
         //this._isGrounded = Physics2D.Linecast(this._transform.position,
         //                                      this.groundCheck.position,
         //                                      1 << LayerMask.NameToLayer("Ground"));
