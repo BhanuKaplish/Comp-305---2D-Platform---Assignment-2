@@ -21,9 +21,11 @@ public class CoolGuyController : MonoBehaviour {
     public float moveForce;
     public float jumpForce;
     public Transform camera;
+    public GameController gameController;
 
     public VelocityRange velocityRange;
     //public Transform groundCheck;
+
 
     //pRIVATE iNSTANCE vARIABLES
     private Rigidbody2D _rigidBody2D;
@@ -38,6 +40,8 @@ public class CoolGuyController : MonoBehaviour {
     private bool _isFacingRight;
     private bool _isGrounded = true;
     private float _jump;
+
+
 
     // Use this for initialization
     void Start ()
@@ -157,12 +161,12 @@ public class CoolGuyController : MonoBehaviour {
     {
         if (other.gameObject.CompareTag("Death"))
         {
-            Debug.Log("Death.");
             this._spawn();
+            this.gameController.livesValue--;
         }
     }
 
-    private void _spawn()
+    public void _spawn()
     {
         this._transform.position = new Vector3(-4.67f, 0.93f, 0);
     }

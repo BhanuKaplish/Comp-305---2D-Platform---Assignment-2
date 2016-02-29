@@ -20,7 +20,7 @@ public class GameController : MonoBehaviour {
         set {
             
             this._scoreValue = value;
-            this.ScoreLabel1.text = "Score: " + this._scoreValue;
+            this.ScoreLabel.text = "Score: " + this._scoreValue;
         }
     }
     public int livesValue
@@ -33,25 +33,27 @@ public class GameController : MonoBehaviour {
         {
             //Debug.Log(this._livesValue);
             this._livesValue = value;
-            
-            if(this._livesValue <= 0)
+            if (this._livesValue <= 0)
             {
-                this.LivesLabel1.text = "Lives: 0";
+                
+                this.LivesLabel.text = "Lives: 0";
+                this.coolGuyController._spawn();
                 this._endGame();
             }
             else
             {
-                this.LivesLabel1.text = "lives: " + this._livesValue;
+                this.LivesLabel.text = "lives: " + this._livesValue;
             }
         }
     }
 
     //Public Instance Variables
     // public CoinController coin;
-    public Text LivesLabel1;
-    public Text ScoreLabel1;
-    //public Text GameOverLabel;
-    //public Text HighscoreLabel;
+    public CoolGuyController coolGuyController;
+    public Text LivesLabel;
+    public Text ScoreLabel;
+    public Text GameOverLabel;
+    public Text HighscoreLabel;
     //public Button RestartButton;
 
     // Use this for initialization
@@ -70,18 +72,18 @@ public class GameController : MonoBehaviour {
     {
         this._livesValue = 5;
         this._scoreValue = 0;
-        //this.GameOverLabel.enabled = false;
-        //this.HighscoreLabel.enabled = false;
+        this.GameOverLabel.enabled = false;
+        this.HighscoreLabel.enabled = false;
         //this.RestartButton.gameObject.SetActive(false);
-        
+
     }
     private void _endGame()
     {
-        //this.HighscoreLabel.text = "Highscore : " + this._scoreValue;     
-        //this.GameOverLabel.enabled = true;
-        //this.HighscoreLabel.enabled = true;
-        this.LivesLabel1.enabled = false;
-        this.ScoreLabel1.enabled = false;
+        this.HighscoreLabel.text = "Highscore : " + this._scoreValue;
+        this.GameOverLabel.enabled = true;
+        this.HighscoreLabel.enabled = true;
+        this.LivesLabel.enabled = false;
+        this.ScoreLabel.enabled = false;
         //this.plane.gameObject.SetActive(false);
         //this.coin.gameObject.SetActive(false);
         //this.RestartButton.gameObject.SetActive(true);
