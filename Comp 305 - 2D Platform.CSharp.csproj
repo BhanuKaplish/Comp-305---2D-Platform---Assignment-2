@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Assets\_Scripts\CoinController2D.cs" />
     <Compile Include="Assets\_Scripts\CoolGuyController.cs" />
+    <Compile Include="Assets\_Scripts\GameController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\codeandweb.com\Editor\SettingsTexturePackerImporter.txt" />

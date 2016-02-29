@@ -52,6 +52,9 @@ public class CoolGuyController : MonoBehaviour {
         //this.jumpForce = 350f;
         this._isFacingRight = true;
 
+        //place coolGuy in starting position
+        this._spawn();
+
         this._audioSources = gameObject.GetComponents<AudioSource> ();
         this._coinSound = this._audioSources[0];
         this._jumpSound = this._audioSources[1];    
@@ -86,7 +89,6 @@ public class CoolGuyController : MonoBehaviour {
 
             if (this._movingValue != 0)
             {
-                Debug.Log("Moving");
                 //coolGuy moving
                 if (this._movingValue > 0)
                 {
@@ -122,13 +124,13 @@ public class CoolGuyController : MonoBehaviour {
         this._rigidBody2D.AddForce(new Vector2(forceX, forceY));
 	}
 
-    void OnCollisionEnter2D(Collision2D otherCollider)
-    {
-        if (otherCollider.gameObject.CompareTag("Coin"))
-        {
-            this._coinSound.Play();
-        }
-    }
+    //void OnCollisionEnter2D(Collision2D otherCollider)
+    //{
+    //    if (otherCollider.gameObject.CompareTag("Coin"))
+    //    {
+    //        this._coinSound.Play();
+    //    }
+    //}
     void OnCollisionStay2D(Collision2D otherCollider)
     {
         if (otherCollider.gameObject.CompareTag("Platform"))
@@ -136,6 +138,7 @@ public class CoolGuyController : MonoBehaviour {
             this._isGrounded = true;
         }
     }
+
 
     //private method
     private void _flip()
@@ -148,5 +151,19 @@ public class CoolGuyController : MonoBehaviour {
         {
             this._transform.localScale = new Vector2(-.0154f, .0112f);
         }
+    }
+
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Death"))
+        {
+            Debug.Log("Death.");
+            this._spawn();
+        }
+    }
+
+    private void _spawn()
+    {
+        this._transform.position = new Vector3(-4.67f, 0.93f, 0);
     }
 }
