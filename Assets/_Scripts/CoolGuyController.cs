@@ -126,15 +126,21 @@ public class CoolGuyController : MonoBehaviour {
         }
 
         this._rigidBody2D.AddForce(new Vector2(forceX, forceY));
-	}
+    }
 
-    //void OnCollisionEnter2D(Collision2D otherCollider)
-    //{
-    //    if (otherCollider.gameObject.CompareTag("Coin"))
-    //    {
-    //        this._coinSound.Play();
-    //    }
-    //}
+    void OnCollisionEnter2D(Collision2D otherCollider)
+    {
+        if (otherCollider.gameObject.CompareTag("Coin"))
+        {
+            this.gameController.ScoreValue += 10;
+            this._coinSound.Play();
+        }
+        if (otherCollider.gameObject.CompareTag("Death"))
+        {
+            this._spawn();
+            this.gameController.livesValue--;
+        }
+    }
     void OnCollisionStay2D(Collision2D otherCollider)
     {
         if (otherCollider.gameObject.CompareTag("Platform"))
@@ -157,14 +163,6 @@ public class CoolGuyController : MonoBehaviour {
         }
     }
 
-    void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.CompareTag("Death"))
-        {
-            this._spawn();
-            this.gameController.livesValue--;
-        }
-    }
 
     public void _spawn()
     {
